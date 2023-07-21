@@ -1,0 +1,60 @@
+﻿@using MarketplaceMVC.ViewModels.AccountViewModels;
+@model RegisterVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Регистрация";
+}
+<form id="registerForm" onsubmit="return false">
+    <h5 class=" mt-5" style="color: #7F7F7F">РЕГИСТРАЦИЯ</h5>
+    <div style="background-color: white; border: 3px solid #d8e3e6; border-radius: 3px; box-shadow: none;" class="p-4">
+        <span class="text-danger" asp-validation-for="Password" id="serverValidate"></span>
+        <div class="form-group flex-column">
+            <label style="color: #8d9aa5;">Имя пользователя: </label>
+            <span class="text-danger" asp-validation-for="Login"></span>
+            <input type="text" class="form-control input-lg" asp-for="Login" placeholder="Name">
+        </div>
+        <div style="border: 1px dashed #c9c9c9" class="mt-3 mb-3"></div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group flex-column">
+                    <label style="color: #8d9aa5;">Пароль: </label>
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                    <input type="password" class="form-control input-lg" asp-for="Password" placeholder="Password">
+                </div>
+                <div style="border: 1px dashed #c9c9c9" class="mt-3 mb-3"></div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group flex-column">
+                    <label style="color: #8d9aa5;">Подтверждение пароля: </label>
+                    <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                    <input type="password" class="form-control input-lg" asp-for="ConfirmPassword" placeholder="Password">
+                </div>
+                <div style="border: 1px dashed #c9c9c9" class="mt-3 mb-3"></div>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="reset" class="btn btn-primary">Очистить</button>
+            <button class="btn btn-primary" type="submit" id="registerBtn">Зарегестрироваться</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <script>
+        $('#registerBtn').on('click', function(){
+           $.ajax({
+               type: "POST",
+               url: '/api/register',
+                data: $('#registerForm').serialize(),
+                success: function(response){
+                    console.log("success")
+                    window.location = "@Url.Action("login","account")"
+                },
+                error: function(response){
+                    console.log(response.message)
+                }
+           })
+        })
+    </script>
+}
