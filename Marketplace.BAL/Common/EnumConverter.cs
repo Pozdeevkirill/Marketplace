@@ -30,7 +30,7 @@ namespace Marketplace.BAL.Common
                 }
             }
 
-            throw new ArgumentOutOfRangeException(nameof(name));
+            throw new ArgumentOutOfRangeException(name);
         }
 
         public static string GetDisplayName(this Enum enumValue)

@@ -1,5 +1,7 @@
 ﻿using Marketplace.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Marketplace.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,20 +24,7 @@ namespace Marketplace.DAL.Data
             Role adminCompany = new() { Id = 4, Name = "adminCompany" };
             Role moderatorCompany = new() { Id = 5, Name = "moderatorCompany" };
 
-            /*User adminUser = new()
-            {
-                Id = 1,
-                Name = "admin",
-                Login = "admin",
-                Email = "admin@mail.ru",
-                Gender = Enums.Gender.Male,
-                Address = "St admin 89",
-                MobilePhone = "+123456",
-                Password = "123",
-            };*/
-
             modelBuilder.Entity<Role>().HasData(new Role[] { admin, moderator, user, adminCompany, moderatorCompany });
-            /*modelBuilder.Entity<User>().HasData(adminUser);*/
 
             base.OnModelCreating(modelBuilder);
         }

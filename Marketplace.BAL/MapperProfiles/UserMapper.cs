@@ -31,10 +31,11 @@ namespace Marketplace.BAL.MapperProfiles
                 Name = user.Name,
                 Password = user.Password,
                 Role = user.Role.Name,
-                Gender = user.Gender.GetDisplayName(),
+                Gender = (int)user.Gender,
                 Email = user.Email,
-                Phone = user.MobilePhone,
+                Phone = user.Phone,
                 Address = user.Address,
+                Avatar = user.Avatar
             };
         }
         
@@ -51,10 +52,11 @@ namespace Marketplace.BAL.MapperProfiles
                     Name = user.Name,
                     Password = user.Password,
                     Role = user.Role.Name,
-                    Gender = user.Gender.GetDisplayName(),
+                    Gender = (int)user.Gender,
                     Email = user.Email,
-                    Phone = user.MobilePhone,
+                    Phone = user.Phone,
                     Address = user.Address,
+                    Avatar = user.Avatar
                 });
             }
 
@@ -74,10 +76,11 @@ namespace Marketplace.BAL.MapperProfiles
                 Name = userDTO.Name,
                 Password = userDTO.Password,
                 Role = role,
-                Gender = userDTO.Gender.GetValueFromName<Gender>(),
+                Gender = (Gender)userDTO.Gender,
                 Email = userDTO.Email,
                 Address = userDTO.Address,
-                MobilePhone = userDTO.Phone
+                Phone = userDTO.Phone,
+                Avatar = userDTO.Avatar
             };
         }
 
@@ -95,10 +98,11 @@ namespace Marketplace.BAL.MapperProfiles
                     Name = userDTO.Name,
                     Password = userDTO.Password,
                     Role = roles.FirstOrDefault(r => r.Name == userDTO.Role) ?? roles.FirstOrDefault(r => r.Id == 3),
-                    Gender = userDTO.Gender.GetValueFromName<Gender>(),
+                    Gender = (Gender)userDTO.Gender,
                     Email = userDTO.Email,
                     Address = userDTO.Address,
-                    MobilePhone = userDTO.Phone
+                    Phone = userDTO.Phone,
+                    Avatar = userDTO.Avatar
                 });
             }
 

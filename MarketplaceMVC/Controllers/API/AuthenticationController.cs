@@ -69,6 +69,7 @@ namespace MarketplaceMVC.Controllers.API
             {
                 Login = registerVM.Login,
                 Password = registerVM.Password,
+                Avatar = "/Files/Images/Avatars/DefaultAvatar.jpg"
             });
             _logger.LogInformation($"[{DateTime.Now}] - Register: Пользователь \"{registerVM.Login}\" успешно зарегестрирован");
             return Ok($"Пользователь \"{registerVM.Login}\" успешно зарегестрирован");

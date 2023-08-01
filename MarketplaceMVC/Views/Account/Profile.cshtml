@@ -1,22 +1,28 @@
-﻿@{
+﻿@using Marketplace.BAL.Common;
+@using Marketplace.DAL.Enums;
+@using MarketplaceMVC.ViewModels.AccountViewModels;
+@model ProfileVM
+
+@{
     ViewData["Title"] = User.Identity.Name;
 }
 
 
-<section style="background-color: #eee;">
+<section style="">
         <div class="row mt-5 p-5">
             <div class="col-lg-4">
-                <div class="card mb-4">
+            <div class="card mb-4 card_shadow">
                     <div class="card-body text-center">
-                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                        <img src="@Model.AvatarPath" alt="avatar"
                              class="rounded-circle img-fluid" style="width: 150px;">
-                        <h5 class="my-3">@User.Identity.Name</h5>
+                        <h5 class="my-3 mb-0">@Model.Name</h5>
+                    <div class=" text-muted mb-3">@@@(Model.Login)</div>
                     <div class="d-flex justify-content-center mb-2">
-                        <button type="button" class="btn btn-outline-primary ms-1">Редактировать</button>
+                        <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#exampleModal">Редактировать</button>
                     </div>
                     </div>
                 </div>
-                <div class="card mb-4 mb-lg-0">
+                <div class="card mb-4 mb-lg-0 card_shadow">
                     <div class="card-body p-0">
                         <ul class="list-group list-group-flush rounded-3">
                             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
@@ -44,14 +50,17 @@
                 </div>
             </div>
             <div class="col-lg-8">
-                <div class="card mb-4">
+            <div class="card mb-4 card_shadow">
                     <div class="card-body">
                     <div class="row">
                         <div class="col-sm-3">
                             <p class="mb-0">Пол</p>
                         </div>
                         <div class="col-sm-9">
-                            <p class="text-muted mb-0">Муж</p>
+                                @{
+                                    var g = (Gender)Model.Gender;
+                                    <p class="text-muted mb-0">@g.GetDisplayName()</p>
+                                }
                         </div>
                     </div>
                     <hr>
@@ -60,8 +69,15 @@
                                 <p class="mb-0">Email</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">example@example.com</p>
-                            </div>
+                                @if (Model.Email == null || Model.Email == string.Empty)
+                                {
+                                    <p class="text-muted mb-0">Не установленно</p>
+                                }
+
+                                else{
+                                    <p class="text-muted mb-0">@Model.Email</p>
+                                }
+                        </div>
                         </div>
                         <hr>
                         <div class="row">
@@ -69,7 +85,15 @@
                                 <p class="mb-0">Телефон</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">(097) 234-5678</p>
+                                @if (Model.Phone == null || Model.Phone == string.Empty)
+                                {
+                                    <p class="text-muted mb-0">Не установленно</p>
+                                }
+
+                                else
+                                {
+                                    <p class="text-muted mb-0">@Model.Phone</p>
+                                }
                             </div>
                         </div>
                         <hr>
@@ -78,14 +102,22 @@
                                 <p class="mb-0">Адрес</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                @if (Model.Address == null || Model.Address == string.Empty)
+                                {
+                                    <p class="text-muted mb-0">Не установленно</p>
+                                }
+
+                                else
+                                {
+                                    <p class="text-muted mb-0">@Model.Address</p>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
+                    <div class="card mb-4 mb-md-0 card_shadow">
                             <div class="card-body">
                                 <p class="mb-4">
                                     <span class="text-primary font-italic me-1">assigment</span> Project Status
@@ -119,7 +151,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
+                    <div class="card mb-4 mb-md-0 card_shadow">
                             <div class="card-body">
                                 <p class="mb-4">
                                     <span class="text-primary font-italic me-1">assigment</span> Project Status
@@ -155,5 +187,120 @@
                 </div>
             </div>
         </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Редактировать</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="edditForm" onsubmit="return false" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        
+                        <div class="row">
+                            <div class="col-sm-3 ">
+                                <p class="mb-0 align-middle flex-column h-100 btn-group-vertical">Аватар</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="file" 
+                                    name="Avatar"
+                                    class="form-control"
+                                    accept="image/png,image/jpeg,image/gif" 
+                                    id="avatarInput" 
+                                    asp-for="@Model.Avatar">
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3 ">
+                                <p class="mb-0 align-middle flex-column h-100 btn-group-vertical">Имя</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">
+                                    <input type="text" placeholder="name" value="@Model.Name" asp-for="@Model.Name" class="form-control">
+                                </p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3 ">
+                                <p class="mb-0 align-middle flex-column h-100 btn-group-vertical">Пол</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">
+                                    <select class="form-control" asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()"></select>
+                                </p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3 ">
+                                <p class="mb-0 align-middle flex-column h-100 btn-group-vertical">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"><input type="email" placeholder="email@email.email" value="@Model.Email" asp-for="@Model.Email" class="form-control"></p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3 ">
+                                <p class="mb-0 align-middle flex-column h-100 btn-group-vertical">Телефон</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"><input type="tel" placeholder="+71234567890" value="@Model.Phone" asp-for="@Model.Phone" class="form-control"></p>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3 ">
+                                <p class="mb-0 align-middle flex-column h-100 btn-group-vertical">Адрес</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"><input type="text" placeholder="Ул.Пушкина д. 90" value="@Model.Address" asp-for="@Model.Address" class="form-control"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn btn-primary" id="saveBtn">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </section>
+
+
+
+@section Scripts
+    {
+    <script>
+        $('#saveBtn').on('click', function () {
+            let data = "";
+            let form = $('#edditForm');
+            console.log(form);
+            $('#edditForm').ajaxForm(function(result) {
+                data = result;
+            });
+            $.ajax({
+                type: "POST",
+                url: '/api/profile/edit',
+                //data: $('#edditForm').serialize(),
+                data: new FormData(form[0]),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log("success")
+                    window.location = "@Url.Action("profile","account")"
+                    serverValidate.text = "";
+                },
+                error: function (response) {
+                    console.log(response.responseJSON.message)
+                    $('#serverValidate').html(response.responseJSON.message);
+                }
+            })
+        })
+    </script>
+}

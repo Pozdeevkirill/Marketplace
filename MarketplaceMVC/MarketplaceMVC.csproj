@@ -22,6 +22,11 @@
 
   <ItemGroup>
     <Folder Include="Mappings\" />
+    <Folder Include="wwwroot\Files\Images\Avatars\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\site.js" />
   </ItemGroup>
 
 </Project>

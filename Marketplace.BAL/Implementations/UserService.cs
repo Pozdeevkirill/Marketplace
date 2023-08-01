@@ -22,17 +22,27 @@ namespace Marketplace.BAL.Implementations
             mapper = new(this.db);
         }
 
+        
         public async Task Create(UserDTO user)
         {
             if (user is null) return;
 
             user.Role = "user";
             user.Name = user.Login;
-            user.Gender = "Не установленно";
+            user.Gender = 0;
 
             var _user = mapper.Map(user);
 
             await db.UserRepository.Create(_user);
+
+            await db.Save();
+        }
+
+        public async Task EditUser(UserDTO user)
+        {
+            if (user == null) return;
+
+            await db.UserRepository.Update(mapper.Map(user));
 
             await db.Save();
         }
@@ -64,5 +74,6 @@ namespace Marketplace.BAL.Implementations
 
             return mapper.Map(user);
         }
+
     }
 }

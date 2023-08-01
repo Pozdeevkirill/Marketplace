@@ -81,6 +81,11 @@ namespace Marketplace.DAL.Implementation
             _model.Password = model.Password;
             _model.Role = model.Role;
             _model.Login = model.Login;
+            _model.Email = model.Email;
+            _model.Address = model.Address;
+            _model.Phone = model.Phone;
+            _model.Gender = model.Gender;
+            _model.Avatar = model.Avatar;
 
             db.Users.Update(_model);
         }
