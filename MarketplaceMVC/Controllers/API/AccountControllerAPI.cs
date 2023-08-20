@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MarketplaceMVC.Controllers.API
 {
-    [Route("api/")]
+    [Route("api/profile/")]
     public class AccountControllerAPI : Controller
     {
         private readonly IUserService userService;
@@ -24,10 +24,10 @@ namespace MarketplaceMVC.Controllers.API
 
         [HttpPost]
         [Authorize]
-        [Route("profile/edit/")]
+        [Route("edit/")]
         public async Task<IActionResult> SaveProfileChanges(ProfileVM profile)
         {
-            if (profile.Name == null) return BadRequest(new Response<ProfileVM> { StatusCode=400, Message = "Форма пуста" });
+            if (!ModelState.IsValid) return BadRequest(new Response<ProfileVM> { StatusCode=400, Message = "Не все обязательные поля заполнены!" });
 
             var user = await userService.GetByLogin(User.Identity.Name);
 
@@ -58,9 +58,8 @@ namespace MarketplaceMVC.Controllers.API
             
             user.Name = profile.Name;
             user.Email = profile.Email;
-            user.Address = profile.Address;
             user.Phone = profile.Phone;
-            user.Gender = profile.Gender;
+            user.SecondName = profile.SecondName;
 
             await userService.EditUser(user);
 
@@ -69,7 +68,7 @@ namespace MarketplaceMVC.Controllers.API
 
         [HttpPost]
         [Authorize]
-        [Route("profile/changephoto")]
+        [Route("changephoto/")]
         public async Task<IActionResult> ChangeProfilePhoto(IFormFile file)
         {
             if(file == null) { return BadRequest(new Response<ProfileVM>() { StatusCode=404, Message="Не установленно фото"}); }
@@ -87,13 +86,12 @@ namespace MarketplaceMVC.Controllers.API
             //Изменение сущности и сохранение
             await userService.EditUser(new()
             {
-                Address = user.Address,
                 Email   = user.Email,
-                Gender = user.Gender,
                 Avatar = path,
                 Id = user.Id,
                 Login = user.Login,
                 Name    = user.Name,
+                SecondName = user.SecondName,
                 Password = user.Password,
                 Phone = user.Phone,
                 Role = user.Role

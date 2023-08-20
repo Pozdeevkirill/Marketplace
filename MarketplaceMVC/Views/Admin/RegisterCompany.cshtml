@@ -1,0 +1,331 @@
+﻿@model MarketplaceMVC.Views.Admin.RegisterCompanyModel
+@{
+    ViewData["Title"] = "Регистрация компании";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+    <style>
+    #regForm {
+      background-color: #ffffff;
+      margin: 50px auto;
+      font-family: Raleway;
+      padding: 40px;
+      width: 70%;
+      min-width: 300px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input, select {
+      padding: 10px;
+      width: 100%;
+      font-size: 17px;
+      font-family: Raleway;
+      border: 1px solid #aaaaaa;
+    }
+
+    /* Отметьте поля ввода, которые получают ошибку при проверке: */
+    input.invalid {
+      background-color: #ffdddd;
+    }
+
+    /* Скрыть все шаги по умолчанию: */
+    .tab {
+      display: none;
+    }
+
+    button {
+        background-color: #4e73df;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 17px;
+      font-family: Raleway;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    #prevBtn {
+      background-color: #bbbbbb;
+    }
+
+    /* Сделайте круги, которые обозначают шаги формы: */
+    .step {
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbbbbb;
+      border: none;
+      border-radius: 50%;
+      display: inline-block;
+      opacity: 0.5;
+    }
+
+    .step.active {
+      opacity: 1;
+    }
+
+    /* Отметьте шаги, которые закончены и действительны: */
+    .step.finish {
+            background-color: #4e73df;
+    }
+
+    .blue {
+        color: #4e73df;
+    }
+    </style>
+
+<form id="regForm" action="../action_page.php">
+    <h1>Регистрация компании:</h1>
+    <!-- Одна "вкладка" для каждого шага в форме: -->
+    <div class="tab ">
+        <div class="d-flex flex-column">
+            <img alt="img" src="~/images/vector-images/Group-391-1.svg" />
+            <div class="text-center fs-4">Пройдите регистрацию компании для начала торговли на нашей площадке!</div>
+        </div>
+    </div>
+    <div class="tab">
+        
+        <p>
+            <label>Название компании<span class="blue">*</span></label>
+            <input placeholder="Название компании" oninput="this.className = ''" name="Name" class="req">
+        </p>
+
+           
+        <p>
+            <label>Краткое описание</label>
+            <input placeholder="Краткое описание" name="Description" >
+        </p>
+
+        <p>
+            <label>Форма предпринемательской деятельности<span class="blue">*</span></label>
+            <select name="CompanyType" class="req" id="companyTypeSelect">
+                <option value="SelfEmployed">Самозанятый</option>
+                <option value="IP">ИП</option>
+                <option value="Organization">ООО</option>
+            </select>
+        </p>
+    <label>Поля, отмеченные <span class="blue">*</span> обязательны к заполнению!</label>
+    </div>
+    <div class="tab">
+        <p>
+            <label>Контактная почта<span class="blue">*</span></label>
+            <input placeholder="mail@mail.ru" oninput="this.className = ''" name="Email" type="email" class="req form-control">
+        </p>
+        <p>
+            <label>Контактный номер телефона<span class="blue">*</span></label>
+            <input placeholder="+7XXXXXXXXXX" oninput="this.className = ''" name="Phone" type="tel" class="req">
+        </p>
+        <label>Поля, отмеченные <span class="blue">*</span> обязательны к заполнению!</label>
+    </div>
+    <div class="tab">
+        <div id="companyInfo">
+            <p>
+                <label>ИНН<span class="blue">*</span></label>
+                <input placeholder="XXXXXXXXXXXX" oninput="this.className = ''" name="INN" type="text" class="req" maxlength="12" id="inn">
+            </p>
+            <p>
+                <label>ФИО<span class="blue">*</span></label>
+                <input placeholder="XXXXXXXXXXXXXXX" oninput="this.className = ''" name="FIO" type="text" class="req" />
+            </p>
+        </div>
+        <label>Поля, отмеченные <span class="blue">*</span> обязательны к заполнению!</label>
+    </div>
+    <div style="overflow:auto;">
+        <div style="float:right;">
+            <button type="button" id="prevBtn" onclick="nextPrev(-1)">Назад</button>
+            <button type="button" id="nextBtn" onclick="nextPrev(1)">Далее</button>
+        </div>
+    </div>
+    <!-- Круги, которые обозначают шаги формы: -->
+    <div style="text-align:center;margin-top:40px;" id="dotsHolder">
+    </div>
+</form>
+@section Scripts {
+    <script>
+        var currentTab = 0; // Текущая вкладка будет первой вкладкой (0)
+        showDots();
+        showTab(currentTab); // Отображение текущей вкладки
+
+
+        function showDots() {
+            const dotsCount = document.getElementsByClassName("tab").length;
+            const dotsHolder = document.querySelector("#dotsHolder");
+
+            for (let i = 0; i < dotsCount; i++) {
+                dotsHolder.innerHTML += `<span class="step"></span>`;
+            }
+        };
+
+        function showTab(n) {
+            // Эта функция будет отображать указанную вкладку формы...
+            var x = document.getElementsByClassName("tab");
+            x[n].style.display = "block";
+            //... и зафиксируйте предыдущие/следующие кнопки:
+            if (n == 0) {
+                document.getElementById("prevBtn").style.display = "none";
+            } else {
+                document.getElementById("prevBtn").style.display = "inline";
+            }
+            if (n == (x.length - 1)) {
+                document.getElementById("nextBtn").innerHTML = "Отправить";
+            } else {
+                document.getElementById("nextBtn").innerHTML = "Далее";
+            }
+            //... и запустить функцию, которая будет отображать правильный индикатор шага:
+            fixStepIndicator(n)
+        }
+
+        function nextPrev(n) {
+            // Эта функция определит, какая вкладка будет отображаться
+            var x = document.getElementsByClassName("tab");
+            // Выйдите из функции, если какое-либо поле в текущей вкладке является недопустимым:
+            if (n == 1 && !validateForm()) return false;
+            // Скрыть текущую вкладку:
+            x[currentTab].style.display = "none";
+            // Увеличение или уменьшение текущей вкладки на 1:
+            currentTab = currentTab + n;
+            console.log("Next...");
+            // если вы дошли до конца формы...
+            if (currentTab >= x.length) {
+                // ... форма будет отправлена:
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/company/create',
+                        data: $('#regForm').serialize(),
+                        success: function (response) {
+                            console.log("success");
+                            window.location = "@Url.Action("login","account")";
+                        },
+                        error: function (response) {
+                            console.log(response);
+                            $('#serverValidate').html(response.responseJSON.message);
+                        }
+                    })
+                return false;
+            }
+            // В противном случае отобразите правильную вкладку:
+            showTab(currentTab);
+        }
+
+        function validateForm() {
+            // Эта функция занимается проверкой полей формы
+            var x, y, i, valid = true;
+            x = document.getElementsByClassName("tab");
+            //y = x[currentTab].getElementsByTagName("input");
+            y = x[currentTab].getElementsByClassName("req");
+
+            // Цикл, который проверяет каждое поле ввода на текущей вкладке:
+            for (i = 0; i < y.length; i++) {
+                // Если поле пусто...
+                if (y[i].value == "") {
+                    // добавьте в поле класс "invalid":
+                    y[i].className += " invalid";
+                    // и установите текущий допустимый статус в false
+                    valid = false;
+                }
+            }
+            // Если действительный статус равен true, отметьте шаг как завершенный и действительный:
+            if (valid) {
+                document.getElementsByClassName("step")[currentTab].className += " finish";
+            }
+            return valid; // верните действительный статус
+        }
+
+        function fixStepIndicator(n) {
+            // Эта функция удаляет класс "active" из всех шагов...
+            var i, x = document.getElementsByClassName("step");
+            for (i = 0; i < x.length; i++) {
+                x[i].className = x[i].className.replace(" active", "");
+            }
+            //... и добавляет класс "active" на текущем шаге:
+            x[n].className += " active";
+        }
+
+        //Автозаполнение по полю ИНН
+        const inn = document.querySelector("#inn");
+        inn.addEventListener("input", getInn);
+
+        function getInn() {
+            if(inn.value.length == 12){
+                //Хотел сделать подгрузку данных через api
+                //после того, как пользователь полностью ввел ИНН
+                //Но эти api платные, так что заглушка)
+                console.log(inn.value);
+            }
+        }
+
+        const companyTypeSelect = document.querySelector("#companyTypeSelect");
+        const companyInfoDiv = document.querySelector("#companyInfo");
+
+        companyTypeSelect.addEventListener("change", (event) => {
+        console.log(`You like ${event.target.value}`);
+            if (event.target.value == "SelfEmployed") {
+                companyInfoDiv.innerHTML = `
+                    <p>
+                        <label>ИНН<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXXXX" oninput="this.className = ''" name="INN" type="text" class="req" maxlength="12" id="inn">
+                    </p>
+                    <p>
+                        <label>ФИО<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXXXXXXX" oninput="this.className = ''" name="FIO" type="text" class="req" />
+                    </p>
+                `;
+            }
+
+            if (event.target.value == "IP") {
+                companyInfoDiv.innerHTML = `
+                    <p>
+                        <label>ИНН<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXXXX" oninput="this.className = ''" name="INN" type="text" class="req" maxlength="12" id="inn"/>
+                    </p>
+                    <p>
+                        <label>ОКПО<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXX" oninput="this.className = ''" name="OKPO" type="text" class="req" maxlength="10"/>
+                    </p>
+                    <p>
+                        <label>ОГРНИП<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXXXXXXX" oninput="this.className = ''" name="OGRNIP" type="text" class="req" maxlength="15"/>
+                    </p>
+                    <p>
+                        <label>ФИО<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXXXXXXX" oninput="this.className = ''" name="FIO" type="text" class="req" />
+                    </p>
+                `;
+            }
+            if (event.target.value == "Organization") {
+                companyInfoDiv.innerHTML = `
+                    <p>
+                        <label>ИНН<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXXXX" oninput="this.className = ''" name="INN" type="text" class="req" maxlength="12" id="inn"/>
+                    </p>
+                    <p>
+                        <label>ОГРН<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXXXXX" oninput="this.className = ''" name="OGRN" type="text" class="req" maxlength="13"/>
+                    </p>
+                    <p>
+                        <label>КПП<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXX" oninput="this.className = ''" name="KPP" type="text" class="req" maxlength="9"/>
+                    </p>
+                    <p>
+                        <label>ОКОПФ<span class="blue">*</span></label>
+                        <input placeholder="XXXXX" oninput="this.className = ''" name="OKOPF" type="text" class="req" maxlength="5"/>
+                    </p>
+                    <p>
+                        <label>ОКПО<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXX" oninput="this.className = ''" name="OKPO" type="text" class="req" maxlength="10"/>
+                    </p>
+                    <p>
+                        <label>ФИО Руководителя<span class="blue">*</span></label>
+                        <input placeholder="XXXXXXXXXXXXXXX" oninput="this.className = ''" name="FIO" type="text" class="req" />
+                    </p>
+                `;
+            }
+        });
+            
+    </script>
+}

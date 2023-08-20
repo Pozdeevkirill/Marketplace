@@ -13,35 +13,34 @@
                 </div>
                 <div class="panel-body p-3 pt-1">
                     <form id="registerForm" onsubmit="return false">
-                        <span class="text-danger" asp-validation-summary="ModelOnly" id="serverValidate"></span>
-
+                        <div class="text-danger" asp-validation-summary="All" id="serverValidate"></div>
                         <div class="btn-group w-100 pb-4">
-                            <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off" checked />
-                            <label class="btn btn-secondary" for="option1">Я Покупатель</label>
+                            <input type="radio" class="btn-check" name="UserType" id="option1" autocomplete="off" checked value="0" />
+                            <label class="btn btn-outline-secondary" for="option1" style="border-color:#0b5ed7;">Я Покупатель</label>
 
-                            <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off" />
-                            <label class="btn btn-secondary" for="option2">Я Продавец</label>
+                            <input type="radio" class="btn-check" name="UserType" id="option2" autocomplete="off" value="1" />
+                            <label class="btn btn-outline-secondary" for="option2">Я Продавец</label>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field login-input-field">
+                            <div class="input-field login-input-field" style="height:45px;">
                                 <span class="far fa-user p-2"></span>
                                 <input type="text" placeholder="Логин" required asp-for="Login">
                             </div>
-                            <span class="text-danger" asp-validation-for="Login"></span>
+                            @*<span class="text-danger" asp-validation-for="Login"></span>*@
                         </div>
-                        <div class="form-group py-1 pb-2 ">
-                            <div class="login-input-field input-field">
+                        <div class="form-group py-1 pb-2">
+                            <div class="login-input-field input-field" style="height:45px;">
                                 <span class="fas fa-lock px-2"></span>
                                 <input type="password" placeholder="Пароль" required id="password-input" asp-for="Password">
                             </div>
-                            <span class="text-danger" asp-validation-for="Password"></span>
+                            @*<span class="text-danger" asp-validation-for="Password"></span>*@
                         </div>
                         <div class="form-group py-1 pb-2 ">
-                            <div class="login-input-field input-field">
+                            <div class="login-input-field input-field" style="height:45px;">
                                 <span class="fas fa-lock px-2"></span>
                                 <input type="password" placeholder="Подтверждение пароля" required id="password-input" asp-for="ConfirmPassword">
                             </div>
-                            <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                            @*<span class="text-danger" asp-validation-for="ConfirmPassword"></span>*@
                         </div>
                         <button type="submit" class="btn btn-primary btn-block mt-3 w-100" id="registerBtn">Зарегестрироваться</button>
                         <div class="text-center pt-4 text-muted">

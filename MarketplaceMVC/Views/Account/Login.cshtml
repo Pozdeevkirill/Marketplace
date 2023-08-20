@@ -16,23 +16,19 @@
                 </div>
                 <div class="panel-body p-3">
                     <form id="loginForm" onsubmit="return false">
-                        <span class="text-danger" asp-validation-summary="ModelOnly" id="serverValidate"></span>
+                        <div class="text-danger" asp-validation-summary="All" id="serverValidate"></div>
                         <div class="form-group py-2">
                             <div class="input-field login-input-field">
-                                <span class="far fa-user p-2"></span>
                                 <input type="text" placeholder="Логин" required asp-for="Login">
                             </div>
-                            <span class="text-danger" asp-validation-for="Login"></span>
                         </div>
                         <div class="form-group py-1 pb-2 ">
                             <div class="login-input-field input-field">
-                                <span class="fas fa-lock px-2"></span>
                                 <input type="password" placeholder="Пароль" required id="password-input" asp-for="Password">
                             </div>
-                            <span class="text-danger" asp-validation-for="Password"></span>
                         </div>
                         <div class="form-inline login-form-inline w-100 flex-row justify-content-between d-flex">
-                            <div class="flex-row">
+                            <div class="flex-row d-flex">
                                 <input type="checkbox" name="remember" id="remember" asp-for="IsPersistent">
                                 <label for="remember" class="text-muted">Запомнить меня</label>
                             </div>

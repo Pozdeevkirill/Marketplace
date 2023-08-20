@@ -26,11 +26,7 @@ namespace Marketplace.BAL.MapperProfiles
 
             foreach (var role in roles)
             {
-                mapped.Add(new()
-                {
-                    Id = role.Id,
-                    Name = role.Name,
-                });
+                mapped.Add(Map(role));
             }
 
             return mapped;
@@ -53,11 +49,7 @@ namespace Marketplace.BAL.MapperProfiles
 
             foreach(var roleDTO in rolesDTO)
             {
-                mapped.Add(new()
-                {
-                    Id = roleDTO.Id,
-                    Name = roleDTO.Name
-                });
+                mapped.Add(Map(roleDTO));
             }
 
             return mapped;

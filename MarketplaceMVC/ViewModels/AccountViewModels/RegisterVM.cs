@@ -4,7 +4,7 @@ namespace MarketplaceMVC.ViewModels.AccountViewModels
 {
     public class RegisterVM
     {
-        [Required(ErrorMessage = "Не указан логин")]
+        [Required(ErrorMessage = "Не указан логин и/или пароль")]
         [MinLength(5, ErrorMessage = "Минимальное число символов: 5")]
         [MaxLength(20, ErrorMessage = "Максимальное число символов: 20")]
         public string Login { get; set; }
@@ -17,5 +17,7 @@ namespace MarketplaceMVC.ViewModels.AccountViewModels
         [Required(ErrorMessage = "Подтвердите пароль")]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
+
+        public int UserType { get; set; }
     }
 }

@@ -27,15 +27,17 @@ namespace Marketplace.BAL.MapperProfiles
             return new()
             {
                 Id = user.Id,
+                NickName = user.NickName,
                 Login = user.Login,
                 Name = user.Name,
                 Password = user.Password,
                 Role = user.Role.Name,
-                Gender = (int)user.Gender,
                 Email = user.Email,
                 Phone = user.Phone,
-                Address = user.Address,
-                Avatar = user.Avatar
+                Avatar = user.Avatar,
+                SecondName = user.SecondName,
+                RegisterDate = user.RegisterDate,
+                AccountType = user.AccountType.ToString(),
             };
         }
         
@@ -45,19 +47,7 @@ namespace Marketplace.BAL.MapperProfiles
 
             foreach (var user in users)
             {
-                mapped.Add(new()
-                {
-                    Id = user.Id,
-                    Login = user.Login,
-                    Name = user.Name,
-                    Password = user.Password,
-                    Role = user.Role.Name,
-                    Gender = (int)user.Gender,
-                    Email = user.Email,
-                    Phone = user.Phone,
-                    Address = user.Address,
-                    Avatar = user.Avatar
-                });
+                mapped.Add(Map(user));
             }
 
             return mapped;  
@@ -66,44 +56,33 @@ namespace Marketplace.BAL.MapperProfiles
         #endregion
 
         #region UserDTO => User
-        public User Map(UserDTO userDTO)
+        public async Task<User> Map(UserDTO userDTO)
         {
-            Role role = db.RoleRepository.Get(userDTO.Role).Result;
+            Role role = await db.RoleRepository.Get(userDTO.Role);
             return new()
             {
                 Id = userDTO.Id,
+                NickName = userDTO.NickName,
                 Login = userDTO.Login,
                 Name = userDTO.Name,
                 Password = userDTO.Password,
                 Role = role,
-                Gender = (Gender)userDTO.Gender,
                 Email = userDTO.Email,
-                Address = userDTO.Address,
                 Phone = userDTO.Phone,
-                Avatar = userDTO.Avatar
+                Avatar = userDTO.Avatar,
+                SecondName = userDTO.SecondName,
+                RegisterDate = userDTO.RegisterDate,
+                AccountType = Enum.Parse<AccountType>(userDTO.AccountType),
             };
         }
 
-        public List<User> Map(List<UserDTO> usersDTO)
+        public async Task<List<User>> Map(List<UserDTO> usersDTO)
         {
             List<User> mapped = new();
-            List<Role> roles = db.RoleRepository.Get().Result.ToList();
 
             foreach (var userDTO in usersDTO)
             {
-                mapped.Add(new()
-                {
-                    Id = userDTO.Id,
-                    Login = userDTO.Login,
-                    Name = userDTO.Name,
-                    Password = userDTO.Password,
-                    Role = roles.FirstOrDefault(r => r.Name == userDTO.Role) ?? roles.FirstOrDefault(r => r.Id == 3),
-                    Gender = (Gender)userDTO.Gender,
-                    Email = userDTO.Email,
-                    Address = userDTO.Address,
-                    Phone = userDTO.Phone,
-                    Avatar = userDTO.Avatar
-                });
+                mapped.Add(await Map(userDTO));
             }
 
             return mapped;

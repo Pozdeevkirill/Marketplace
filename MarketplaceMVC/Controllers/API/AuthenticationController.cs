@@ -1,5 +1,6 @@
 ﻿using Marketplace.BAL.Implementations;
 using Marketplace.BAL.Interfaces;
+using Marketplace.BAL.ModelsDTO;
 using MarketplaceMVC.Common;
 using MarketplaceMVC.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -30,6 +31,8 @@ namespace MarketplaceMVC.Controllers.API
         {
             _logger.LogInformation($"[{DateTime.Now}] - Register: {registerVM.Login}...");
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            //Проверка на пустую модель
             if (registerVM == null)
             {
                 ModelState.AddModelError(registerVM.Login, "Не указан логин и/или пароль");
@@ -41,6 +44,7 @@ namespace MarketplaceMVC.Controllers.API
                 });
             }
 
+            //Проверка на занятость логина
             if (await userService.GetByLogin(registerVM.Login) != null)
             {
                 ModelState.AddModelError(registerVM.ConfirmPassword, "Данный логин уже занят");
@@ -53,6 +57,7 @@ namespace MarketplaceMVC.Controllers.API
                 });
             }
 
+            //Проверка на совпадение пароля (Актуально для API)
             if (registerVM.Password != registerVM.ConfirmPassword)
             {
                 ModelState.AddModelError(registerVM.ConfirmPassword, "Пароли не совпадают");
@@ -65,12 +70,37 @@ namespace MarketplaceMVC.Controllers.API
                 });
             }
 
-            await userService.Create(new()
+            UserDTO user = new()
             {
+                NickName = registerVM.Login,
                 Login = registerVM.Login,
                 Password = registerVM.Password,
-                Avatar = "/Files/Images/Avatars/DefaultAvatar.jpg"
-            });
+                Name = "Аноним",
+                Avatar = "/Files/Images/Avatars/DefaultAvatar.jpg",
+                RegisterDate = DateTime.Now.ToString("d")
+            };
+
+            if (registerVM.UserType == 0)
+            {
+                user.Role = "user";
+                user.AccountType = "client";
+            }
+
+            if (registerVM.UserType == 1) 
+            {
+                user.Role = "adminCompany";
+                user.AccountType = "seller";
+            }
+
+            if(registerVM.UserType > 1) 
+                return BadRequest(new Response<RegisterVM>()
+                {
+                    StatusCode = 400,
+                    Message = "Неверно указан индекс роли",
+                    Data = registerVM
+                });
+
+            await userService.Create(user);
             _logger.LogInformation($"[{DateTime.Now}] - Register: Пользователь \"{registerVM.Login}\" успешно зарегестрирован");
             return Ok($"Пользователь \"{registerVM.Login}\" успешно зарегестрирован");
         }

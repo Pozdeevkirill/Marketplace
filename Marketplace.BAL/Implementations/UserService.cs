@@ -25,13 +25,9 @@ namespace Marketplace.BAL.Implementations
         
         public async Task Create(UserDTO user)
         {
-            if (user is null) return;
+            if (user == null) return;
 
-            user.Role = "user";
-            user.Name = user.Login;
-            user.Gender = 0;
-
-            var _user = mapper.Map(user);
+            var _user = await mapper.Map(user);
 
             await db.UserRepository.Create(_user);
 
@@ -42,7 +38,7 @@ namespace Marketplace.BAL.Implementations
         {
             if (user == null) return;
 
-            await db.UserRepository.Update(mapper.Map(user));
+            await db.UserRepository.Update(await mapper.Map(user));
 
             await db.Save();
         }
@@ -51,7 +47,6 @@ namespace Marketplace.BAL.Implementations
         {
             var result = await db.UserRepository.Get();
             
-
             return mapper.Map(result.ToList());
         }
 

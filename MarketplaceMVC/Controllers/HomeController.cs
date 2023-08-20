@@ -28,20 +28,6 @@ namespace MarketplaceMVC.Controllers
             return View();
         }
 
-        [Route("/test")]
-        [HttpPost]
-        public async Task<IActionResult> Test(RegisterVM vm)
-        {
-            await userService.Create(new()
-            {
-                Login = vm.Login,
-                Password = vm.Password
-            });
-
-            var result =  await userService.GetAll();
-            return Ok(result);
-        }
-
         public IActionResult Privacy()
         {
             return View();
@@ -51,6 +37,13 @@ namespace MarketplaceMVC.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        [Route("/accessdenied")]
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
         }
     }
 }

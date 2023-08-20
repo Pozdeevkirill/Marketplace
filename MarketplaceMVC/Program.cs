@@ -1,9 +1,11 @@
 using Marketplace.BAL.Implementations;
 using Marketplace.BAL.Interfaces;
 using Marketplace.BAL.MapperProfiles;
+using Marketplace.BAL.ModelsDTO;
 using Marketplace.DAL.Data;
 using Marketplace.DAL.Implementation;
 using Marketplace.DAL.Interfaces;
+using Marketplace.DAL.Models;
 using MarketplaceMVC.Common;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -19,19 +21,25 @@ builder.Services.AddControllersWithViews();
 
 //Database
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<MarketplaceContext>(options => options.EnableSensitiveDataLogging().UseSqlServer(connectionString));
+builder.Services.AddDbContext<MarketplaceContext>(options =>
+{
+    options.EnableSensitiveDataLogging().UseSqlServer(connectionString);
+});
 
 //DI
 //Mappers
 builder.Services.AddScoped<RoleMapper>();
 builder.Services.AddScoped<UserMapper>();
+builder.Services.AddScoped<CompanyMapper>();
 //Repositoryes
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 //Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 
 

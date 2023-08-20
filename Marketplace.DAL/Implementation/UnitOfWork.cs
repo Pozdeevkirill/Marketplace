@@ -38,6 +38,17 @@ namespace Marketplace.DAL.Implementation
             }
         }
 
+        private CompanyRepository companyRepository;
+        public ICompanyRepository CompanyRepository
+        {
+            get
+            {
+                if (companyRepository == null)
+                    companyRepository = new(db);
+                return companyRepository;
+            }
+        }
+
         public async Task Save()
         {
             await db.SaveChangesAsync();

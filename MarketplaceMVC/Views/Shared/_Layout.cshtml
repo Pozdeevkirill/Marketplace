@@ -7,10 +7,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
-    @*<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />*@
-    @*<link rel="stylesheet" href="~/css/tiny-slider.css" asp-append-version="true" />*@
-    @*<link rel="stylesheet" href="~/MarketplaceMVC.styles.css" asp-append-version="true" />*@
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
@@ -18,6 +14,8 @@
     <link rel="stylesheet" href="~/css/tiny-slider.css" />
     <link rel="stylesheet" href="~/css/glightbox.min.css" />
     <link rel="stylesheet" href="~/css/main.css" />
+    <!-- Custom styles for this template-->
+    <link href="~/css/Admin/sb-admin-2.css" rel="stylesheet">
 
 </head>
 <body>
@@ -34,6 +32,7 @@
 
     <!-- Start Header Area -->
     <header class="header navbar-area">
+
         <!-- Start Header Middle -->
         <div class="header-middle">
             <div class="container">
@@ -91,77 +90,104 @@
                                         </a>
                                     </div>
                                     <div class="cart-items" style="margin-right:12px">
-                                    <a href="javascript:void(0)" class="main-btn">
-                                        <i class="lni lni-cart"></i>
-                                        <span class="total-items">2</span>
-                                    </a>
-                                    <!-- Shopping Item -->
-                                    <div class="shopping-item">
-                                        <div class="dropdown-cart-header">
-                                            <span>2 Items</span>
-                                            <a href="cart.html">View Cart</a>
-                                        </div>
-                                        <ul class="shopping-list" style="max-height: 350px; overflow-y: scroll">
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item">
-                                                    <i class="lni lni-close"></i>
-                                                </a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html">
-                                                        <img src="~/images/header/cart-items/item1.jpg" alt="#">
-                                                    </a>
-                                                </div>
-                                                <div class="content">
-                                                    <h4>
-                                                        <a href="product-details.html">
-                                                            Apple Watch Series 6
-                                                        </a>
-                                                    </h4>
-                                                    <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                                </div>
-                                            </li>
-
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item">
-                                                    <i class="lni lni-close"></i>
-                                                </a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html">
-                                                        <img src="~/images/header/cart-items/item1.jpg" alt="#">
-                                                    </a>
-                                                </div>
-
-                                                <div class="content">
-                                                    <h4>
-                                                        <a href="product-details.html">
-                                                            Apple Watch Series 6
-                                                        </a>
-                                                    </h4>
-                                                    <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="bottom">
-                                            <div class="total">
-                                                <span>Total</span>
-                                                <span class="total-amount">$134.00</span>
+                                        <a href="javascript:void(0)" class="main-btn">
+                                            <i class="lni lni-cart"></i>
+                                            <span class="total-items">2</span>
+                                        </a>
+                                        <!-- Shopping Item -->
+                                        <div class="shopping-item">
+                                            <div class="dropdown-cart-header">
+                                                <span>2 Items</span>
+                                                <a href="cart.html">View Cart</a>
                                             </div>
-                                            <div class="button">
-                                                <a href="checkout.html" class="btn animate">Checkout</a>
+                                            <ul class="shopping-list" style="max-height: 350px; overflow-y: scroll">
+                                                <li>
+                                                    <a href="javascript:void(0)" class="remove" title="Remove this item">
+                                                        <i class="lni lni-close"></i>
+                                                    </a>
+                                                    <div class="cart-img-head">
+                                                        <a class="cart-img" href="product-details.html">
+                                                            <img src="~/images/header/cart-items/item1.jpg" alt="#">
+                                                        </a>
+                                                    </div>
+                                                    <div class="content">
+                                                        <h4>
+                                                            <a href="product-details.html">
+                                                                Apple Watch Series 6
+                                                            </a>
+                                                        </h4>
+                                                        <p class="quantity">1x - <span class="amount">$99.00</span></p>
+                                                    </div>
+                                                </li>
+
+                                                <li>
+                                                    <a href="javascript:void(0)" class="remove" title="Remove this item">
+                                                        <i class="lni lni-close"></i>
+                                                    </a>
+                                                    <div class="cart-img-head">
+                                                        <a class="cart-img" href="product-details.html">
+                                                            <img src="~/images/header/cart-items/item1.jpg" alt="#">
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="content">
+                                                        <h4>
+                                                            <a href="product-details.html">
+                                                                Apple Watch Series 6
+                                                            </a>
+                                                        </h4>
+                                                        <p class="quantity">1x - <span class="amount">$99.00</span></p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="bottom">
+                                                <div class="total">
+                                                    <span>Total</span>
+                                                    <span class="total-amount">$134.00</span>
+                                                </div>
+                                                <div class="button">
+                                                    <a href="checkout.html" class="btn animate">Checkout</a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                     <!--/ End Shopping Item -->
                                 </div>
-                                    <div class="cart-items">
+
+
+
+
+
+
+                                    <div class="cart-items ">
                                         <a href="~/profile" class="main-btn">
                                             <i class="las la-user"></i>
                                         </a>
                                         <!-- Shopping Item -->
-                                        <div class="shopping-item" style="padding:0px">
-                                            <a class="dropdown-item" href="~/profile"><i class="fas fa-user mr-2"></i> Account</a>
-                                            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i> Setting</a>
-                                            <button class="dropdown-item" id="logoutBtn"><i class="fas fa-power-off mr-2"></i> Logout</button>
+                                        <div class="shopping-item shadow animated--grow-in"
+                                             style="padding:0px; width: auto;">
+                                            <div class=""
+                                                 aria-labelledby="userDropdown">
+                                                <a class="dropdown-item" href="~/profile">
+                                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                    Профиль
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                    Настройки
+                                                </a>
+                                                @if(!User.IsInRole("user"))
+                                                {
+                                                    <a class="dropdown-item" href="~/admin">
+                                                        <i class="fas fa-desktop fa-sm fa-fw mr-2 text-gray-400" aria-hidden="true"></i>
+                                                        Админ-панель
+                                                    </a>
+                                                }
+                                                <div class="dropdown-divider"></div>
+                                                <button class="dropdown-item" id="logoutBtn" data-toggle="modal" data-target="#logoutModal">
+                                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                                    Выход
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -469,16 +495,16 @@
         
     
     <!--Скрипты для валидации-->
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    @*<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.10/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://kit.fontawesome.com/341698100d.js" crossorigin="anonymous"></script>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    
 
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    
     <script>
         $('#logoutBtn').on('click', function () {
             $.ajax({
@@ -495,50 +521,13 @@
         })
 
     </script>
-    <script src = "~/js/bootstrap.min.js" ></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/js/Admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/tiny-slider.js"></script>
     <script src="~/js/glightbox.min.js"></script>
     <script src="~/js/main.js"></script>
-    <script src="https://malsup.github.io/jquery.form.js"></script> 
-    <script type="text/javascript">
-                //========= Hero Slider
-                tns({
-                    container: '.hero-slider',
-                    slideBy: 'page',
-                    autoplay: true,
-                    autoplayButtonOutput: false,
-                    mouseDrag: true,
-                    gutter: 0,
-                    items: 1,
-                    nav: false,
-                    controls: true,
-                    controlsText: ['<i class="lni lni-chevron-left"></i>', '<i class="lni lni-chevron-right"></i>'],
-                });
 
-        //======== Brand Slider
-        tns({
-            container: '.brands-logo-carousel',
-            autoplay: true,
-            autoplayButtonOutput: false,
-            mouseDrag: true,
-            gutter: 15,
-            nav: false,
-            controls: false,
-            responsive: {
-                0: {
-                    items: 1,
-                },
-                540: {
-                    items: 3,
-                },
-                768: {
-                    items: 5,
-                },
-                992: {
-                    items: 6,
-                }
-            }
-        });
-    </script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
