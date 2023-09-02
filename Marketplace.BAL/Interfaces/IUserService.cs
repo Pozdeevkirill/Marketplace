@@ -14,5 +14,7 @@ namespace Marketplace.BAL.Interfaces
         public Task<UserDTO> GetById(int id);
         public Task<UserDTO> GetByLogin(string login);
         public Task EditUser(UserDTO user);
+        public Task<IEnumerable<UserDTO>> GetByRegisterDate(string date);
+        public Task<IEnumerable<UserDTO>> GetByPeriod(string startDate, string lastDate);
     }
 }

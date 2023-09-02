@@ -24,6 +24,7 @@
   <ItemGroup>
     <Folder Include="Mappings\" />
     <Folder Include="wwwroot\Files\Images\Avatars\" />
+    <Folder Include="wwwroot\Files\Images\Products\" />
   </ItemGroup>
 
   <ItemGroup>

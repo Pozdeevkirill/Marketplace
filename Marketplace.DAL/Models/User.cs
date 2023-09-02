@@ -21,6 +21,6 @@ namespace Marketplace.DAL.Models
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string Avatar { get; set; }
-        public string RegisterDate { get; set; }
+        public DateTime RegisterDate { get; set; }
     }
 }

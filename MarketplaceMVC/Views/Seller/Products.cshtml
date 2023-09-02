@@ -1,0 +1,446 @@
+﻿@using MarketplaceMVC.ViewModels.SellerViewModels;
+@model List<ProductVM>
+@{
+    ViewData["Title"] = "Товары";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int itemCount = 1;
+}
+
+@section CSS
+{
+    <link href="~/js/Admin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        .truncate {
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label.file {
+            display: block;
+            position: relative;
+            background-color: #025bee;
+            color: #ffffff;
+            font-size: 12px;
+            text-align: center;
+            width: 150px;
+            padding: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container p.file {
+            margin: 20px 0 30px 0;
+        }
+
+        #images {
+            width: 90%;
+            position: relative;
+            margin: auto;
+            display: flex;
+            justify-content: space-evenly;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        figure.file {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        img.file {
+            width: 50%;
+            margin: auto;
+        }
+
+        figcaption.file {
+            text-align: center;
+            font-size: 1.4vmin;
+            margin-top: 0.5vmin;
+        }
+
+        form.user .form-control-user {
+            font-size: .8rem;
+             border-radius: 0rem; 
+            padding: 1.5rem 1rem;
+        }
+
+
+
+        .scrolbar::-webkit-scrollbar-track {
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+
+        .scrolbar::-webkit-scrollbar {
+            width: 5px;
+            background-color: #F5F5F5;
+        }
+
+        .scrolbar::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: rgba(0,0,0,.3);
+        }
+
+
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label.file {
+            display: block;
+            position: relative;
+            background-color: #025bee;
+            color: #ffffff;
+            font-size: 12px;
+            text-align: center;
+            width: 150px;
+            padding: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container p.file {
+            margin: 20px 0 30px 0;
+        }
+
+        #images {
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        li.file {
+            width: 20%;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            border: none;
+        }
+
+        .prod_input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+            .prod_input + img {
+                border: 1px dashed #4e73df;
+                width: 100%;
+                height: 100%;
+                padding: 5px;
+                width: 90%;
+                margin: auto;
+                object-fit: contain;
+            }
+
+        prod_input:hover + img {
+            border: 1px solid #4e73df;
+        }
+
+        .prod_input:checked + img {
+            border: 2px solid #4e73df;
+        }
+    </style>
+}
+
+<div class="card o-hidden border-0 shadow-lg my-7">
+    <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+            <div class="col">
+                <div class="p-5">
+                    <h1 class="h3 mb-2 text-gray-800">Карточки товаров</h1>
+                    <p class="mb-4">Созданные карточки товара можно увидеть в таблице ниже. Здесь можно добавить товар, отредактировать его.</p>
+                    
+                    <a href="~/admin/createProduct" class="btn btn-primary btn-icon-split">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span class="text">Добавить товар</span>
+                    </a>
+
+                    <!-- DataTales Example -->
+                    <div class="card mb-4 mt-2">
+                        @*<div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                        </div>*@
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Название</th>
+                                            <th>Описание</th>
+                                            <th>Цена</th>
+                                            <th>Количество</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Название</th>
+                                            <th>Описание</th>
+                                            <th>Цена</th>
+                                            <th>Количество</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody id="tbody">
+                                        @for (int i = 1; i < Model.Count + 1; i++)
+                                        {
+                                            <tr id="product_@Model[i-1].Id">
+                                                <td>@i</td>
+                                                <td>@Model[i-1].Name</td>
+                                                <td class="truncate">@Model[i-1].Description</td>
+                                                <td>@Model[i-1].Price.ToString("C2")</td>
+                                                <td>@Model[i-1].Amount</td>
+                                                <td class="d-flex right">
+                                                    <a href="#" class="btn btn-secondary btn-circle">
+                                                        <span class="icon text-white">
+                                                            <i class="fas fa-eye"></i>
+                                                        </span>
+                                                    </a>
+                                                    <a class="btn btn-primary btn-circle" data-toggle="modal" data-target="#exampleModalCenter" onclick="OpenEditorMenu(@Model[i-1].Id)">
+                                                        <span class="icon text-white">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </span>
+                                                    </a>
+                                                    <a href="#" class="btn btn-danger btn-circle" onclick="Delete(@Model[i-1].Id)">
+                                                        <span class="icon text-white">
+                                                            <i class="fas fa-trash"></i>
+                                                        </span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="user" id="editForm" onsubmit="return false">
+                <div class="modal-body">
+                
+
+                        <div class="form-group">
+                            <label>Название товара</label>
+
+                            <input type="text" class="form-control form-control-user" id="nameFiled"
+                                   placeholder="Название.." required value="" name="Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Описание товара</label>
+
+                            <div class="editor" style="border: 1px solid #d1d3e2;"></div>
+                            <textarea name="Description" id="editor_area" style="display:none"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Стоймость товара</label>
+
+                            <input type="number" class="form-control form-control-user" id="priceField"
+                                   placeholder="100000" required value="" name="Price">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="file" name="Images" class="file-input-edit" id="file-input" accept="image/png, image/jpeg" onchange="preview()" multiple>
+                            <label for="file-input" class="file">
+                                <i class="fas fa-upload"></i> &nbsp; Choose A Photo
+                            </label>
+                            <div id="images"></div>
+                        </div>
+                
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" id="editBtn" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Admin/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/js/Admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/ckeditor5/build/ckeditor.js"></script>
+
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('.editor'), {
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(console.log(this));
+    </script>
+
+    <script>
+        let table = $('#dataTable');
+        $(document).ready(function () {
+            table.DataTable({
+                "language": {
+                    "search": "Поиск: ",
+                    "processing": "Поиск...",
+                    "loadingRecords": "Идет загрузка...",
+                    "lengthMenu": "Количество товаров на странице:  _MENU_ ",
+                    "info": "Показано от _START_ до _END_ из _TOTAL_ товаров",
+                    "emptyTable": "Нет подходящих данных в таблице",
+                    "paginate": {
+                        "next": ">",
+                        "previous": "<"
+                    }
+
+                }
+            });
+        });
+    </script>
+
+    <script>
+
+       
+
+        let tbody = document.querySelector("#tbody");
+        function Delete(id) {
+            $.ajax({
+                type: "POST",
+                url: `/api/product/delete?id=${id}`,
+                data: id,
+                success: function (response) {
+                    console.log("success");
+                    var row = tbody.querySelector("#product_" + id)
+                    table.DataTable().row(row).remove().draw();
+                },
+                error: function (response) {
+                }
+            })
+        }
+
+        var Id = 0;
+
+        $('#editBtn').on('click', function () {
+            //Получение данных из ckeditor
+            document.querySelector("#editor_area").value = editor.getData();
+            console.log(Id);
+
+            let form = new FormData($('#editForm')[0]);
+            form.append("id", Id);
+
+            $.ajax({
+                type: "POST",
+                url: '/api/product/edit',
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log("success")
+                },
+                error: function (response) {
+                    console.log(obj);
+                    console.log(response.Body);
+                }
+            })
+        });
+
+        let Products = @Html.Raw(Json.Serialize(@Model));
+
+        console.log(Products);
+
+        let prod;
+        function OpenEditorMenu(id) {
+            prod = Products.find(p => p.id === id);
+            document.querySelector("#nameFiled").value = prod.name;
+            editor.setData(prod.description);
+            document.querySelector("#priceField").value = prod.price;
+            Id = id;
+
+            const fileInput = document.querySelector("#file-input");
+            const dataTransfer = new DataTransfer();
+
+            for (let i = 0; i < prod.images.length; i++) {
+                const file = new File(["Images"], prod.images[i],
+                {
+                    type: "image/jpeg",
+                    lastModified: new Date(),
+                });
+                dataTransfer.items.add(file);
+            }
+
+            fileInput.files = dataTransfer.files;
+            console.log(fileInput.files);
+            preview(true);
+        } 
+
+        
+    </script>
+
+    <script>
+        let fileInput = document.getElementById("file-input");
+        let imageContainer = document.getElementById("images");
+        let numOfFiles = document.getElementById("num-of-files");
+
+
+        function preview(s = false) {
+            imageContainer.innerHTML = "";
+            imageContainer.className = "card-holder";
+            let p = 0;
+
+            console.log(fileInput.files);
+            for (let i = 0; i < fileInput.files.length; i++) {
+                let reader = new FileReader();
+                let li = document.createElement("li");
+                li.className = "file card product-image";
+                let radio = document.createElement("input");
+                radio.type = "radio";
+                radio.value = p;
+                radio.name = "MainImageId";
+                radio.className = "prod_input";
+                if (p === prod.mainImageId) {
+                    radio.checked = true;
+                }
+                reader.onload = () => {
+                    let img = document.createElement("img");
+                    img.className = "file";
+                    if (s) {img.setAttribute("src", fileInput.files[i].name);}
+                    else {img.setAttribute("src", reader.result);}
+                    li.appendChild(img);
+                }
+                li.appendChild(radio);
+                imageContainer.appendChild(li);
+                reader.readAsDataURL(fileInput.files[i]);
+                p++;
+            }
+        }
+    </script>
+
+}

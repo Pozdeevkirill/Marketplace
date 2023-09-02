@@ -1,7 +1,7 @@
 ﻿using Marketplace.BAL.Interfaces;
 using Marketplace.BAL.ModelsDTO;
 using MarketplaceMVC.Common;
-using MarketplaceMVC.ViewModels.AdminViewModels;
+using MarketplaceMVC.ViewModels.SellerViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -69,7 +69,7 @@ namespace MarketplaceMVC.Controllers.API
             await companyService.Create(companyDTO);
             logger.LogInformation($"[{DateTime.Now}] - Create company: Компания \"{companyDTO.Name}\" успешно зарегестрированна на @\"{companyDTO.Owner.Login}\"");
 
-            return Ok($" Компания \\\"{{companyDTO.Name}}\\\" успешно зарегестрированна на @\\\"{{companyDTO.Owner.Login}}\"");
+            return Ok($" Компания \"{companyDTO.Name}\" успешно зарегестрированна на @\"{companyDTO.Owner.Login}\"");
         }
     }
 }

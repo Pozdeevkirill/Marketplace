@@ -11,5 +11,7 @@ namespace Marketplace.DAL.Interfaces
     {
         public Task<IEnumerable<User>> Get(Role role);
         public Task<User> Get(string login);
+        public Task<IEnumerable<User>> GetByDay(string date);
+        public Task<IEnumerable<User>> GetPyPeriod(DateTime startDate, DateTime lastDate);
     }
 }

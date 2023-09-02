@@ -29,7 +29,7 @@ namespace Marketplace.DAL.Implementation
             if (id < 0) return;
 
             var model = await Get(id);
-            if (model == null) return;
+            if (model.Name == null || model.Name == string.Empty) return;
 
             db.Companies.Remove(model);
         }
@@ -45,7 +45,7 @@ namespace Marketplace.DAL.Implementation
             if (id < 0) return new Company();
 
             return await db.Companies
-                .FirstOrDefaultAsync(c => c.Id == id) ?? new Company();
+                .FindAsync(id) ?? new Company();
         }
 
         public async Task<Company> GetByOwnerId(int ownerId)
@@ -61,7 +61,7 @@ namespace Marketplace.DAL.Implementation
 
             var _model = await Get(model.Id);
 
-            if (model == null) return;
+            if (_model == null) return;
 
             _model.Name = model.Name;
             _model.Description = model.Description;

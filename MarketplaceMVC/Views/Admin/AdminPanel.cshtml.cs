@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MarketplaceMVC.Views.Admin
 {
-    public class AdminProfileModel : PageModel
+    public class AdminPanelModel : PageModel
     {
         public void OnGet()
         {

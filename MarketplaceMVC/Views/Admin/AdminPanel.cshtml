@@ -1,9 +1,10 @@
 ﻿@using MarketplaceMVC.ViewModels.AdminViewModels;
-@model CompanyVM
+@model AdminPanelVM
 @{
     ViewData["Title"] = "Админ-панель";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -25,12 +26,12 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Прибыль (Месячная)
+                                Новых пользователей (День)
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">₽40,000</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.NewUsersCountDay</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -44,12 +45,12 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Прибыль (Годовая)
+                                Новых пользователей (Месяц)
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">₽215,000</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.NewUsersCountMonth</div>
                         </div>
                         <div class="col-auto pb-2">
-                            <i class="las la-ruble-sign" style="font-size: 64px; color: #dddfeb!important;"></i>
+                            <i class="fas la-user fa-2x text-gray-300" style="color: #dddfeb!important;"></i>
                         </div>
                     </div>
                 </div>
@@ -443,4 +444,3 @@
         });
     </script>
 }
-       

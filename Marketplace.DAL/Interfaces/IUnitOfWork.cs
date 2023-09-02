@@ -11,6 +11,8 @@ namespace Marketplace.DAL.Interfaces
         public IUserRepository UserRepository { get; }
         public IRoleRepository RoleRepository { get; }
         public ICompanyRepository CompanyRepository { get; }
+        public IImageRepository ImageRepository { get; }
+        public IProductRepository ProductRepository { get; }
         public Task Save();
     }
 }

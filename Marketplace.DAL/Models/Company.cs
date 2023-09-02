@@ -28,5 +28,6 @@ namespace Marketplace.DAL.Models
         public string? Address { get; set; } //Юр.Адрес
         public string? KPP { get; set; } //КПП
         public string? OKOPF { get; set; } //ОКОПФ
+        public IEnumerable<Product> Products { get; set; }
     }
 }

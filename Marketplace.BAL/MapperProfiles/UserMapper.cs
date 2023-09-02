@@ -1,5 +1,4 @@
-﻿using Marketplace.BAL.Common;
-using Marketplace.BAL.ModelsDTO;
+﻿using Marketplace.BAL.ModelsDTO;
 using Marketplace.DAL.Enums;
 using Marketplace.DAL.Interfaces;
 using Marketplace.DAL.Models;
@@ -36,7 +35,7 @@ namespace Marketplace.BAL.MapperProfiles
                 Phone = user.Phone,
                 Avatar = user.Avatar,
                 SecondName = user.SecondName,
-                RegisterDate = user.RegisterDate,
+                RegisterDate = user.RegisterDate.ToString(),
                 AccountType = user.AccountType.ToString(),
             };
         }
@@ -71,7 +70,7 @@ namespace Marketplace.BAL.MapperProfiles
                 Phone = userDTO.Phone,
                 Avatar = userDTO.Avatar,
                 SecondName = userDTO.SecondName,
-                RegisterDate = userDTO.RegisterDate,
+                RegisterDate = DateTime.Parse(userDTO.RegisterDate),
                 AccountType = Enum.Parse<AccountType>(userDTO.AccountType),
             };
         }

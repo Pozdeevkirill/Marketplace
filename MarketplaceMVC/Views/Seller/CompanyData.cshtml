@@ -1,0 +1,99 @@
+﻿@using MarketplaceMVC.ViewModels.SellerViewModels;
+@model CompanyVM
+@{
+    ViewData["Title"] = "Данные компании";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="card o-hidden border-0 shadow-lg">
+    <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+            <div class="col">
+                <div class="p-5">
+                    <div class="text-center">
+                        <h1 class="h4 text-gray-900 mb-4">Данные магазина</h1>
+                    </div>
+                    <form class="user">
+
+                        <div class="form-group">
+                            <label>Название магазина</label>
+
+                            <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                   placeholder="Email Address" required value="@Model.Name">
+                        </div>
+                        <div class="form-group">
+                            <label>ФИО Руководителя</label>
+
+                            <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                   placeholder="Email Address" required value="@Model.FIO" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Контактный E-Mail</label>
+
+                            <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                   placeholder="Email Address" required value="@Model.Email">
+                        </div>
+                        <div class="form-group">
+                            <label>ИНН</label>
+
+                            <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                   placeholder="Email Address" required value="@Model.INN" disabled>
+                        </div>
+                        
+                        @switch (Model.CompanyType)
+                        {
+                            case "SelfEmployed":
+                                
+                                break;
+                            case "IP":
+                                <div class="form-group">
+                                    <label>ОКПО</label>
+
+                                    <input type = "email" class="form-control form-control-user" id="exampleInputEmail"
+                                    placeholder="Email Address" required value="@Model.OKPO" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>ОГРНИП</label>
+
+                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                            placeholder="Email Address" required value="@Model.OGRNIP" disabled>
+                                </div>
+                                break;
+                            case "Organization":
+                                <div class="form-group">
+                                    <label>ОГРН</label>
+
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                           placeholder="Email Address" required value="@Model.OGRN" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>КПП</label>
+
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                            placeholder="Email Address" required value="@Model.KPP" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>ОКОПФ</label>
+
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                           placeholder="Email Address" required value="@Model.OKOPF" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>ОКПО</label>
+
+                                    <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                           placeholder="Email Address" required value="@Model.OKPO" disabled>
+                                </div>
+                                break;
+                        }
+                        <label>Пока не сделано 😒</label>
+                        <a href="login.html" class="btn btn-primary btn-user btn-block">
+                            Сохранить изменения
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

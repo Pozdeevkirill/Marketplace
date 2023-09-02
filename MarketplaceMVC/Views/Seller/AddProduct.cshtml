@@ -1,0 +1,212 @@
+﻿@{
+    ViewData["Title"] = "Создание товара";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section CSS {
+    <style>
+        input[type="file"] {
+            display: none;
+        }
+
+        label.file {
+            display: block;
+            position: relative;
+            background-color: #025bee;
+            color: #ffffff;
+            font-size: 12px;
+            text-align: center;
+            width: 150px;
+            padding: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container p.file {
+            margin: 20px 0 30px 0;
+        }
+
+        #images {
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        li.file {
+            width: 20%;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            border: none;
+        }
+
+        .prod_input{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .prod_input + img {
+                border: 1px dashed #4e73df;
+                width: 100%;
+                height: 100%;
+                padding: 5px;
+                width: 90%;
+                margin: auto;
+                object-fit: contain;
+        }
+
+        prod_input:hover + img {
+            border: 1px solid #4e73df;
+        }
+
+        .prod_input:checked + img {
+            border: 2px solid #4e73df;
+        }
+    </style>
+}
+<div class="container">
+    <div class="card o-hidden border-0 shadow-lg">
+        <div class="card-body p-0 ">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Добавление товара</h1>
+                        </div>
+                        <form class="user" id="createForm" onsubmit="return false">
+
+                            <div class="form-group">
+                                <label>Название товара</label>
+
+                                <input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                       placeholder="Название.." required value="" name="Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Описание товара</label>
+
+                                <div class=" editor"
+                                     required value="" style="border: 1px solid #d1d3e2;"></div>
+                                <textarea name="Description" id="editor_area" style="display:none">
+                                    
+                                </textarea>
+                                @*<input type="text" class="form-control form-control-user" id="exampleInputEmail"
+                                       placeholder="Описание.." required value="" name="Description">*@
+                            </div>
+                            <div class="form-group">
+                                <label>Стоймость товара</label>
+
+                                <input type="number" class="form-control form-control-user" id="exampleInputEmail"
+                                       placeholder="Количество.." required value="" name="Price">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="file" name="Images" id="file-input" accept="image/png, image/jpeg" onchange="preview()" multiple>
+                                <label for="file-input" class="file">
+                                    <i class="fas fa-upload"></i> &nbsp; Добавить
+                                </label>
+                                <ul id="images"></ul>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block mt-3 w-100" id="createBtn">Создать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    <script src="~/js/ckeditor5/build/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('.editor'), {
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(handleSampleError);
+    </script>
+
+    @*Скрипт для отображения картинок*@
+    <script>
+        let fileInput = document.getElementById("file-input");
+        let imageContainer = document.getElementById("images");
+        let numOfFiles = document.getElementById("num-of-files");
+
+
+        function preview() {
+            imageContainer.innerHTML = "";
+            imageContainer.className = "card-holder";
+            let p = 0;
+
+            console.log(fileInput.files);
+            for (i of fileInput.files) {
+                let reader = new FileReader();
+                let li = document.createElement("li");
+                li.className = "file card product-image";
+                let radio = document.createElement("input");
+                radio.type = "radio";
+                radio.value = p;
+                radio.name = "MainImageId";
+                radio.className = "prod_input";
+                if (p === 0) {
+                    radio.checked = true;
+                }
+                reader.onload = () => {
+                    let img = document.createElement("img");
+                    img.className = "file";
+                    img.setAttribute("src", reader.result);
+                    li.appendChild(img);
+                }
+                li.appendChild(radio);
+                imageContainer.appendChild(li);
+                reader.readAsDataURL(i);
+                p++;
+            }
+        }
+    </script>
+
+
+    <script>
+        $('#createBtn').on('click', function () {
+            document.querySelector("#editor_area").value = editor.getData();
+            $.ajax({
+                type: "POST",
+                url: '/api/product/create',
+                data: new FormData($('#createForm')[0]),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log("success")
+
+                    console.log($('#createForm')[0]);
+                    //window.location = "@Url.Action("index","home")"
+                    //serverValidate.text = "";
+                },
+                error: function (response) {
+                    console.log(response.responseJSON.message)
+                    //$('#serverValidate').html(response.responseJSON.message);
+                }
+            })
+        });
+
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        for (const radioButton of radioButtons) {
+            radioButton.addEventListener('change', showSelected);
+        }
+
+        function showSelected(e) {
+            if (this.checked) {
+                console.log(this.value);
+            }
+        }
+    </script>
+}

@@ -70,5 +70,25 @@ namespace Marketplace.BAL.Implementations
             return mapper.Map(user);
         }
 
+        public async Task<IEnumerable<UserDTO>> GetByPeriod(string startDate, string lastDate)
+        {
+            if (startDate == string.Empty || startDate == "" || 
+                lastDate == string.Empty || lastDate == "") return new List<UserDTO>();
+
+            DateTime _startDate = DateTime.Parse(startDate);
+            DateTime _lastDate = DateTime.Parse(lastDate);  
+
+            var users = await db.UserRepository.GetPyPeriod(_startDate, _lastDate);
+            return mapper.Map(users.ToList());
+        }
+
+        public async Task<IEnumerable<UserDTO>> GetByRegisterDate(string date)
+        {
+            if (date == string.Empty || date == "") return new List<UserDTO>();
+
+            var users = await db.UserRepository.GetByDay(date);
+
+            return mapper.Map(users.ToList());
+        }
     }
 }

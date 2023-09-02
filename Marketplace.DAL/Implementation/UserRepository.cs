@@ -69,6 +69,21 @@ namespace Marketplace.DAL.Implementation
             return user;
         }
 
+        public async Task<IEnumerable<User>> GetByDay(string date)
+        {
+            if (date == string.Empty || date == "") return null;
+
+            return await db.Users.Include(u => u.Role).Where(u => u.RegisterDate == DateTime.Parse(date)).ToListAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetPyPeriod(DateTime startDate, DateTime lastDate)
+        {
+            var result = await db.Users.Include(u => u.Role)
+                .Where(u => u.RegisterDate >= startDate && u.RegisterDate <= lastDate)
+                .ToListAsync();
+            return result;
+        }
+
         public async Task Update(User model)
         {
             if (model == null) return;

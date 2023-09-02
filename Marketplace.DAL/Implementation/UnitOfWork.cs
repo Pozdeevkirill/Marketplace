@@ -49,6 +49,28 @@ namespace Marketplace.DAL.Implementation
             }
         }
 
+        private ImageRepository imageRepository;
+        public IImageRepository ImageRepository
+        {
+            get
+            {
+                if (imageRepository == null)
+                    imageRepository = new(db);
+                return imageRepository;
+            }
+        }
+
+        private ProductRepository productRepository;
+        public IProductRepository ProductRepository
+        {
+            get
+            {
+                if (productRepository == null)
+                    productRepository = new(db, imageRepository);
+                return productRepository;
+            }
+        }
+
         public async Task Save()
         {
             await db.SaveChangesAsync();
