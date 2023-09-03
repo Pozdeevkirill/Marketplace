@@ -66,34 +66,16 @@ namespace Marketplace.DAL.Implementation
             // update properties on the parent
             db.Entry(_model).CurrentValues.SetValues(model);
 
-            var _imgs = _model.Images.ToList();
+
+            // remove child
+            foreach (var img in _model.Images.ToList())
+            {
+                db.Images.Remove(img);
+            }
+
+            // add new child
             var imgs = model.Images.ToList();
-
-            var img = model.Images.FirstOrDefault(i => i.IsMainImage == true);
-            await imageRepository.Update(_imgs, imgs, _model.Id, img.Id);
-
-
-            /*// remove or update child collection items
-            if(imgs.Count() >= imgs.Count())
-            {
-                for (int i = 0; i < _imgs.Count(); i++)
-                {
-                    if (i > imgs.Count() - 1)
-                        db.Remove(_imgs[i]);
-
-                    db.Entry(_imgs[i]).CurrentValues.SetValues(imgs[i]);
-                }
-            }  
-            // add new items
-            foreach (var image in model.Images)
-            {
-                if(_imgs.All(i => i.Id != image.Id))
-                {
-                    _imgs.Add(image);
-                }
-            }*/
-
-            //db.Products.Update(model);
+            db.Images.AddRange(imgs);
         }
     }
 }

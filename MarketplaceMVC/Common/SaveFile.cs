@@ -1,4 +1,5 @@
 ﻿using Marketplace.DAL.Models;
+using System.IO;
 
 namespace MarketplaceMVC.Common
 {
@@ -25,5 +26,26 @@ namespace MarketplaceMVC.Common
 
             return result;
         }
-    }
+
+
+        public static async Task<List<string>> ReplaceFile(IWebHostEnvironment appEnvironment,
+                                                                List<string> oldFiles,
+                                                                List<IFormFile> newFiles,
+                                                                string companyName,
+                                                                string productName)
+        {
+            //Удаление текущиъх файлов
+            RemoveFiles(appEnvironment,oldFiles);
+
+            return await SaveProductFile(appEnvironment, newFiles, companyName, productName);
+        }
+
+        public static void RemoveFiles(IWebHostEnvironment appEnvironment, List<string> oldFiles)
+        {
+            foreach (var file in oldFiles)
+            {
+                File.Delete(file);
+            }
+        }
+     }
 }

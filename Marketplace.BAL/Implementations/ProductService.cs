@@ -85,6 +85,7 @@ namespace Marketplace.BAL.Implementations
             prod.Price = product.Price;
             prod.Amount = product.Amount;
             prod.Images = product.Images;
+            prod.MainImageId = product.MainImageId;
 
             await db.ProductRepository.Update(await mapper.Map(prod));
             await db.Save();

@@ -99,8 +99,9 @@ namespace MarketplaceMVC.Controllers.API
                 logger.LogError($"[{DateTime.Now}] - ProductController.RemoveProduct: {company.Name} попытался удалить не принадлежащий ему товар {product.Name}");
                 return BadRequest(new Response<ProductVM>() { StatusCode = 403, Message = "У вас нету доступа к этому товару" });
             }
-
             await productService.Delete(id);
+            SaveFile.RemoveFiles(appEnvironment,product.Images);
+
             logger.LogInformation($"[{DateTime.Now}] - ProductController.RemoveProduct: Пользователь @{user.Login} успешно удалил товар \"{product.Name}\" компании \"{company.Name}\"");
 
 
@@ -140,8 +141,9 @@ namespace MarketplaceMVC.Controllers.API
 
             dto.Name = productVM.Name;
             dto.Description = productVM.Description;
-            dto.Images = await SaveFile.SaveProductFile(appEnvironment, productVM.Images, company.Name, dto.Name);
+            dto.Images = await SaveFile.ReplaceFile(appEnvironment, dto.Images, productVM.Images, company.Name, dto.Name);
             dto.Price = productVM.Price;
+            dto.MainImageId = productVM.MainImageId;
 
             await productService.Update(dto);
             logger.LogInformation($"[{DateTime.Now}] - ProductController.EditProduct: {User.Identity.Name} успешно отредактировал {dto.Name}!");
