@@ -90,5 +90,20 @@ namespace Marketplace.BAL.Implementations
             await db.ProductRepository.Update(await mapper.Map(prod));
             await db.Save();
         }
+
+        public async Task UpdateImages(ProductDTO product)
+        {
+            if (product == null || product.Name == "" || product.Name == string.Empty) return;
+
+            var prod = await GetById(product.Id);
+
+            if (prod == null || prod.Name == "" || prod.Name == string.Empty) return;
+
+            prod.Images = product.Images;
+            prod.MainImageId = product.MainImageId;
+
+            await db.ProductRepository.Update(await mapper.Map(prod));
+            await db.Save();
+        }
     }
 }

@@ -90,13 +90,9 @@
                             <div class="form-group">
                                 <label>Описание товара</label>
 
-                                <div class=" editor"
+                                <div class=" editor" id="editor"
                                      required value="" style="border: 1px solid #d1d3e2;"></div>
-                                <textarea name="Description" id="editor_area" style="display:none">
-                                    
-                                </textarea>
-                                @*<input type="text" class="form-control form-control-user" id="exampleInputEmail"
-                                       placeholder="Описание.." required value="" name="Description">*@
+                                <textarea name="Description" id="editor_area" style="display:none"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Стоймость товара</label>
@@ -126,8 +122,16 @@
     {
     <script src="~/js/ckeditor5/build/ckeditor.js"></script>
     <script>
+        //ckeditor 5
         ClassicEditor
             .create(document.querySelector('.editor'), {
+                simpleUpload: {
+                    // The URL that the images are uploaded to.
+                    uploadUrl: "/api/product/saveImg",
+
+                    // Enable the XMLHttpRequest.withCredentials property.
+                    withCredentials: true,
+                }
             })
             .then(editor => {
                 window.editor = editor;
@@ -152,6 +156,8 @@
                 let reader = new FileReader();
                 let li = document.createElement("li");
                 li.className = "file card product-image";
+
+                //Создание элемента radio
                 let radio = document.createElement("input");
                 radio.type = "radio";
                 radio.value = p;
@@ -160,6 +166,8 @@
                 if (p === 0) {
                     radio.checked = true;
                 }
+
+                //Вставка картинки в ul
                 reader.onload = () => {
                     let img = document.createElement("img");
                     img.className = "file";
@@ -185,15 +193,9 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    console.log("success")
 
-                    console.log($('#createForm')[0]);
-                    //window.location = "@Url.Action("index","home")"
-                    //serverValidate.text = "";
                 },
                 error: function (response) {
-                    console.log(response.responseJSON.message)
-                    //$('#serverValidate').html(response.responseJSON.message);
                 }
             })
         });
@@ -205,7 +207,6 @@
 
         function showSelected(e) {
             if (this.checked) {
-                console.log(this.value);
             }
         }
     </script>

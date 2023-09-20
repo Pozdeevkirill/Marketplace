@@ -3,18 +3,23 @@
 @{
     ViewData["Title"] = "Товары";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    int itemCount = 1;
 }
 
 @section CSS
 {
     <link href="~/js/Admin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="~/css/ItemDetail.css" rel="stylesheet">
+
     <style>
         .truncate {
             max-width: 100px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        img {
+            max-width: 100%;
         }
 
         input[type="file"] {
@@ -152,6 +157,21 @@
         .prod_input:checked + img {
             border: 2px solid #4e73df;
         }
+
+        .img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .main-img {
+            width: 100%;
+            height: 300px;
+        }
+
+        .ck-content {
+            max-height: 350px;
+        }
     </style>
 }
 
@@ -209,12 +229,12 @@
                                                 <td>@Model[i-1].Price.ToString("C2")</td>
                                                 <td>@Model[i-1].Amount</td>
                                                 <td class="d-flex right">
-                                                    <a href="#" class="btn btn-secondary btn-circle">
+                                                    <a class="btn btn-secondary btn-circle" data-toggle="modal" data-target="#previewModal" onclick="OpenPreviewMenu(@Model[i-1].Id)">
                                                         <span class="icon text-white">
                                                             <i class="fas fa-eye"></i>
                                                         </span>
                                                     </a>
-                                                    <a class="btn btn-primary btn-circle" data-toggle="modal" data-target="#exampleModalCenter" onclick="OpenEditorMenu(@Model[i-1].Id)">
+                                                    <a class="btn btn-primary btn-circle" data-toggle="modal" data-target="#editModal" onclick="OpenEditorMenu(@Model[i-1].Id)">
                                                         <span class="icon text-white">
                                                             <i class="fa fa-pencil"></i>
                                                         </span>
@@ -238,8 +258,8 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -272,11 +292,7 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="file" name="Images" class="file-input-edit" id="file-input" accept="image/png, image/jpeg" onchange="preview()" multiple>
-                            <label for="file-input" class="file">
-                                <i class="fas fa-upload"></i> &nbsp; Choose A Photo
-                            </label>
-                            <div id="images"></div>
+                        <a id="" class="btn btn-primary" data-toggle="modal" data-target="#editModalImg" onclick="OpenImgEditor()">Изменить изображения</a>
                         </div>
                 
                 </div>
@@ -289,13 +305,404 @@
     </div>
 </div>
 
+<!-- Modal edit imgs -->
+<div class="modal fade" id="editModalImg" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="user" id="editImgsForm" onsubmit="return false">
+                <div class="form-group d-flex flex-column align-center p-3" style="align-items: center;">
+                    <input type="file" name="Images" class="file-input-edit" 
+                        id="file-input" accept="image/png, image/jpeg" onchange="preview()" multiple>
+                    <label for="file-input" class="file mb-5">
+                        <i class="fas fa-upload"></i> &nbsp; Выберите фото
+                    </label>
+                    <ul id="images"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" id="editImgsBtn" class="btn btn-primary" onclick="">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal preview -->
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Start Item Details -->
+                <section class="item-details section">
+                    <div class="container">
+                        <div class="top-area">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 col-md-12 col-12">
+                                    <div class="product-images">
+                                        <main id="gallery">
+                                            <div class="main-img">
+                                                <img src="https://via.placeholder.com/1000x670" id="current" alt="#">
+                                            </div>
+                                            <div class="preview-images">
+                                                <img src="https://via.placeholder.com/1000x671" class="img" alt="#">
+                                                <img src="https://via.placeholder.com/1000x672" class="img" alt="#">
+                                                <img src="https://via.placeholder.com/1000x673" class="img" alt="#">
+                                                <img src="https://via.placeholder.com/1000x674" class="img" alt="#">
+                                                <img src="https://via.placeholder.com/1000x675" class="img" alt="#">
+                                                <img src="https://via.placeholder.com/1000x675" class="img" alt="#">
+                                                <img src="https://via.placeholder.com/1000x675" class="img" alt="#">
+                                                <img src="https://via.placeholder.com/1000x675" class="img" alt="#">
+                                                <img src="https://via.placeholder.com/1000x675" class="img" alt="#">
+                                            </div>
+                                        </main>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 col-12">
+                                    <div class="product-info d-flex flex-column justify-content-between ">
+                                        <h2 class="title" id="preview_name">GoPro Karma Camera Drone</h2>
+                                        <p class="category">
+                                            <i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">
+                                                Action
+                                                cameras
+                                            </a>
+                                        </p>
+                                        <h3 class="price" id="preview_price">$850<span id="oldPrice"></span></h3>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-12">
+                                                <div class="form-group color-option">
+                                                    <label class="title-label" for="size">Choose color</label>
+                                                    <div class="single-checkbox checkbox-style-1">
+                                                        <input type="checkbox" id="checkbox-1" checked>
+                                                        <label for="checkbox-1"><span></span></label>
+                                                    </div>
+                                                    <div class="single-checkbox checkbox-style-2">
+                                                        <input type="checkbox" id="checkbox-2">
+                                                        <label for="checkbox-2"><span></span></label>
+                                                    </div>
+                                                    <div class="single-checkbox checkbox-style-3">
+                                                        <input type="checkbox" id="checkbox-3">
+                                                        <label for="checkbox-3"><span></span></label>
+                                                    </div>
+                                                    <div class="single-checkbox checkbox-style-4">
+                                                        <input type="checkbox" id="checkbox-4">
+                                                        <label for="checkbox-4"><span></span></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-12">
+                                                <div class="form-group">
+                                                    <label for="color">Battery capacity</label>
+                                                    <select class="form-control" id="color">
+                                                        <option>5100 mAh</option>
+                                                        <option>6200 mAh</option>
+                                                        <option>8000 mAh</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-12">
+                                                <div class="form-group quantity">
+                                                    <label for="color">Quantity</label>
+                                                    <select class="form-control">
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bottom-content">
+                                            <div class="row align-items-end">
+                                                <div class="col-lg-4 col-md-4 col-12">
+                                                    <div class="button cart-button">
+                                                        <button class="btn" style="width: 100%;">Add to Cart</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-12">
+                                                    <div class="wish-button">
+                                                        <button class="btn"><i class="lni lni-reload"></i> Compare</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-12">
+                                                    <div class="wish-button">
+                                                        <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-details-info">
+                            <div class="single-block">
+                                <div class="row">
+                                    <div class="col-lg-12 col-12">
+                                        <div class="info-body custom-responsive-margin">
+                                            <h4>Описание</h4>
+                                            <p id="preview_description">
+                                                Описание...
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-12">
+                                        <div class="info-body custom-responsive-margin">
+                                            <h4>Характеристики</h4>
+                                            <ul class="features">
+                                                <li>Capture 4K30 Video and 12MP Photos</li>
+                                                <li>Game-Style Controller with Touchscreen</li>
+                                                <li>View Live Camera Feed</li>
+                                                <li>Full Control of HERO6 Black</li>
+                                                <li>Use App for Dedicated Camera Operation</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-12">
+                                        <div class="info-body">
+                                            <h4>Specifications</h4>
+                                            <ul class="normal-list">
+                                                <li><span>Weight:</span> 35.5oz (1006g)</li>
+                                                <li><span>Maximum Speed:</span> 35 mph (15 m/s)</li>
+                                                <li><span>Maximum Distance:</span> Up to 9,840ft (3,000m)</li>
+                                                <li><span>Operating Frequency:</span> 2.4GHz</li>
+                                                <li><span>Manufacturer:</span> GoPro, USA</li>
+                                            </ul>
+                                            <h4>Shipping Options:</h4>
+                                            <ul class="normal-list">
+                                                <li><span>Courier:</span> 2 - 4 days, $22.50</li>
+                                                <li><span>Local Shipping:</span> up to one week, $10.00</li>
+                                                <li><span>UPS Ground Shipping:</span> 4 - 6 days, $18.00</li>
+                                                <li><span>Unishop Global Export:</span> 3 - 4 days, $25.00</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-12">
+                                    <div class="single-block give-review">
+                                        <h4>4.5 (Overall)</h4>
+                                        <ul>
+                                            <li>
+                                                <span>5 stars - 38</span>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                            </li>
+                                            <li>
+                                                <span>4 stars - 10</span>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star"></i>
+                                            </li>
+                                            <li>
+                                                <span>3 stars - 3</span>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star"></i>
+                                                <i class="lni lni-star"></i>
+                                            </li>
+                                            <li>
+                                                <span>2 stars - 1</span>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star"></i>
+                                                <i class="lni lni-star"></i>
+                                                <i class="lni lni-star"></i>
+                                            </li>
+                                            <li>
+                                                <span>1 star - 0</span>
+                                                <i class="lni lni-star-filled"></i>
+                                                <i class="lni lni-star"></i>
+                                                <i class="lni lni-star"></i>
+                                                <i class="lni lni-star"></i>
+                                                <i class="lni lni-star"></i>
+                                            </li>
+                                        </ul>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn review-btn" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal">
+                                            Leave a Review
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8 col-12">
+                                    <div class="single-block">
+                                        <div class="reviews">
+                                            <h4 class="title">Latest Reviews</h4>
+                                            <!-- Start Single Review -->
+                                            <div class="single-review">
+                                                <img src="https://via.placeholder.com/150x150" alt="#">
+                                                <div class="review-info">
+                                                    <h4>
+                                                        Awesome quality for the price
+                                                        <span>
+                                                            Jacob Hammond
+                                                        </span>
+                                                    </h4>
+                                                    <ul class="stars">
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                    </ul>
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                                        tempor...
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!-- End Single Review -->
+                                            <!-- Start Single Review -->
+                                            <div class="single-review">
+                                                <img src="https://via.placeholder.com/150x150" alt="#">
+                                                <div class="review-info">
+                                                    <h4>
+                                                        My husband love his new...
+                                                        <span>
+                                                            Alex Jaza
+                                                        </span>
+                                                    </h4>
+                                                    <ul class="stars">
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star"></i></li>
+                                                    </ul>
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                                        tempor...
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!-- End Single Review -->
+                                            <!-- Start Single Review -->
+                                            <div class="single-review">
+                                                <img src="https://via.placeholder.com/150x150" alt="#">
+                                                <div class="review-info">
+                                                    <h4>
+                                                        I love the built quality...
+                                                        <span>
+                                                            Jacob Hammond
+                                                        </span>
+                                                    </h4>
+                                                    <ul class="stars">
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                        <li><i class="lni lni-star-filled"></i></li>
+                                                    </ul>
+                                                    <p>
+                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                                        tempor...
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!-- End Single Review -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- End Item Details -->
+                <!-- Review Modal -->
+                <div class="modal fade review-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Leave a Review</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="review-name">Your Name</label>
+                                            <input class="form-control" type="text" id="review-name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="review-email">Your Email</label>
+                                            <input class="form-control" type="email" id="review-email" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="review-subject">Subject</label>
+                                            <input class="form-control" type="text" id="review-subject" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="review-rating">Rating</label>
+                                            <select class="form-control" id="review-rating">
+                                                <option>5 Stars</option>
+                                                <option>4 Stars</option>
+                                                <option>3 Stars</option>
+                                                <option>2 Stars</option>
+                                                <option>1 Star</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-message">Review</label>
+                                    <textarea class="form-control" id="review-message" rows="8" required></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer button">
+                                <button type="button" class="btn">Submit Review</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <button type="button" id="editBtn" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script src="~/js/Admin/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="~/js/Admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/ckeditor5/build/ckeditor.js"></script>
 
-
     <script>
+        //ckeditor 5
         ClassicEditor
             .create(document.querySelector('.editor'), {
             })
@@ -306,6 +713,7 @@
     </script>
 
     <script>
+        //Таблица товаров
         let table = $('#dataTable');
         $(document).ready(function () {
             table.DataTable({
@@ -327,9 +735,7 @@
     </script>
 
     <script>
-
-       
-
+        //Удаление товара с удаление его из таблицы
         let tbody = document.querySelector("#tbody");
         function Delete(id) {
             $.ajax({
@@ -348,10 +754,10 @@
 
         var Id = 0;
 
+        //Редактирование товара
         $('#editBtn').on('click', function () {
             //Получение данных из ckeditor
             document.querySelector("#editor_area").value = editor.getData();
-            console.log(Id);
 
             let form = new FormData($('#editForm')[0]);
             form.append("id", Id);
@@ -366,15 +772,12 @@
                     console.log("success")
                 },
                 error: function (response) {
-                    console.log(obj);
-                    console.log(response.Body);
                 }
             })
         });
 
+        //Получение списка товаров
         let Products = @Html.Raw(Json.Serialize(@Model));
-
-        console.log(Products);
 
         let prod;
         function OpenEditorMenu(id) {
@@ -383,7 +786,9 @@
             editor.setData(prod.description);
             document.querySelector("#priceField").value = prod.price;
             Id = id;
+        } 
 
+        function OpenImgEditor() {
             const fileInput = document.querySelector("#file-input");
             const dataTransfer = new DataTransfer();
 
@@ -397,11 +802,60 @@
             }
 
             fileInput.files = dataTransfer.files;
-            console.log(fileInput.files);
             preview(true);
-        } 
+        }
 
         
+    </script>
+
+    <script>
+
+        let rubl = new Intl.NumberFormat('ru-RU', {
+            style: 'currency',
+            currency: 'RUB',
+        });
+        let preview_img_holder = document.querySelector(".preview-images");
+        const current = document.getElementById("current");
+        const opacity = 0.6;
+        let nameField = document.querySelector("#preview_name");
+        let priceField = document.querySelector("#preview_price");
+        let descriptionField = document.querySelector("#preview_description");
+        function OpenPreviewMenu(id) {
+            prod = Products.find(p => p.id === id);
+            preview_img_holder.innerHTML = "";
+
+            //Установка изображений
+            for (let i = 0; i < prod.images.length; i++) {
+                let img = document.createElement("img");
+                img.classList.add("img");
+                img.src = prod.images[i];
+                preview_img_holder.appendChild(img);
+            }
+
+            console.log(prod.name)
+            nameField.innerHTML = prod.name;
+            priceField.innerHTML = prod.price;
+            descriptionField.innerHTML = prod.description;
+
+            let price = prod.price;
+            priceField.innerHTML = rubl.format(price);
+            console.log(nameField);
+
+            
+            //Подгрузка картинок
+            const imgs = document.querySelectorAll(".img");
+            console.log(imgs);
+            current.src = imgs[0].src;
+            imgs.forEach(img => {
+                img.addEventListener("click", (e) => {
+                    imgs.forEach(img => {
+                        img.style.opacity = 1;
+                    });
+                    current.src = e.target.src;
+                    e.target.style.opacity = opacity;
+                });
+            });
+        }
     </script>
 
     <script>
@@ -415,7 +869,6 @@
             imageContainer.className = "card-holder";
             let p = 0;
 
-            console.log(fileInput.files);
             for (let i = 0; i < fileInput.files.length; i++) {
                 let reader = new FileReader();
                 let li = document.createElement("li");
@@ -443,4 +896,26 @@
         }
     </script>
 
+    <script>
+        $('#editImgsBtn').on('click', function () {
+            //Получение данных из ckeditor
+            document.querySelector("#editor_area").value = editor.getData();
+
+            let form = new FormData($('#editImgsForm')[0]);
+            form.append("productId", Id);
+
+            $.ajax({
+                type: "POST",
+                url: '/api/product/editImgs',
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log("success")
+                },
+                error: function (response) {
+                }
+            })
+        });
+    </script>
 }

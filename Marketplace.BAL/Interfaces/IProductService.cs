@@ -13,6 +13,7 @@ namespace Marketplace.BAL.Interfaces
         public Task<IEnumerable<ProductDTO>> GetAll();
         public Task<ProductDTO> GetById(int id);
         public Task Update(ProductDTO product);
+        public Task UpdateImages(ProductDTO product);
         public Task Delete(int id);
         public Task<IEnumerable<ProductDTO>> GetByCompanyName(string companyName);
     }

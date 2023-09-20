@@ -8,5 +8,12 @@ namespace MarketplaceMVC.Controllers.Product
         public ProductController()
         {
         }
+
+        [HttpGet]
+        [Route("/product")]
+        public async Task<IActionResult> Detail()
+        {
+            return View();
+        }
     }
 }

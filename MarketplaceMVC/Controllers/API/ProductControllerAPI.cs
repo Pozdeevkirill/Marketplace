@@ -5,6 +5,7 @@ using Marketplace.DAL.Interfaces;
 using Marketplace.DAL.Models;
 using MarketplaceMVC.Common;
 using MarketplaceMVC.ViewModels.AccountViewModels;
+using MarketplaceMVC.ViewModels.CommonViewModels;
 using MarketplaceMVC.ViewModels.SellerViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -141,14 +142,53 @@ namespace MarketplaceMVC.Controllers.API
 
             dto.Name = productVM.Name;
             dto.Description = productVM.Description;
-            dto.Images = await SaveFile.ReplaceFile(appEnvironment, dto.Images, productVM.Images, company.Name, dto.Name);
             dto.Price = productVM.Price;
-            dto.MainImageId = productVM.MainImageId;
 
             await productService.Update(dto);
             logger.LogInformation($"[{DateTime.Now}] - ProductController.EditProduct: {User.Identity.Name} успешно отредактировал {dto.Name}!");
 
             return Ok(new Response<EditProductVM>() { StatusCode = 200, Message = "Данный о товаре успешно изменены"});
+        }
+
+        [HttpPost]
+        [Route("editImgs")]
+        [Authorize(Roles = "adminCompany")]
+        public async Task<IActionResult> EditProductImages([FromForm]EditImagesVM imagesVM)
+        {
+            if (imagesVM == null || imagesVM.Images.Count == 0)
+                return BadRequest(new Response<EditImagesVM>() { StatusCode = 400, Message = "Изображения не могут быть пустыми." });
+
+            var dto = await productService.GetById(imagesVM.ProductId);
+            if (dto.Id == 0) return BadRequest(new Response<EditProductVM>() { StatusCode = 404, Message = "Указанный товар небыл найден" });
+
+            var user = await userService.GetByLogin(User.Identity.Name) ?? new();
+            var company = await companyService.GetByOwnerId(user.Id) ?? new();
+
+            if (company.Id == 0)
+            {
+                logger.LogError($"[{DateTime.Now}] - ProductController.EditProductImages: Не удалось найти компанию, котороый владеет \"@{user.Login}\"");
+                return BadRequest(new Response<EditProductVM>() { StatusCode = 404, Message = "Не удалось найти компанию с таким владельцем" });
+            }
+
+            logger.LogInformation($"[{DateTime.Now}] - ProductController.EditProductImages: {User.Identity.Name} редактирует изображения товара с именем {dto.Name}...");
+
+            dto.Images = await SaveFile.ReplaceFile(appEnvironment, dto.Images, imagesVM.Images, company.Name, dto.Name);
+            dto.MainImageId = imagesVM.MainImageId;
+
+            await productService.UpdateImages(dto);
+            logger.LogInformation($"[{DateTime.Now}] - ProductController.EditProductImages: {User.Identity.Name} успешно отредактировал изображения {dto.Name}!");
+
+            return Ok(new Response<EditProductVM>() { StatusCode = 200, Message = "Изображения товаре успешно изменены" });
+        }
+
+
+        //TODO: Вынести этот метод в другой подходящий класс
+        [HttpPost]
+        [Route("saveImg")]
+        public async Task<IActionResult> UploadImg([FromForm]UploadImageVM file)
+        {
+            var path = await SaveFile.SaveImage(appEnvironment, file.Upload);
+            return Ok(new { Url = path});
         }
     }
 }

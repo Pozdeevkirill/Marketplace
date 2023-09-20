@@ -44,8 +44,20 @@ namespace MarketplaceMVC.Common
         {
             foreach (var file in oldFiles)
             {
-                File.Delete(file);
+                File.Delete(appEnvironment.WebRootPath + file);
             }
+        }
+
+        public static async Task<string> SaveImage(IWebHostEnvironment appEnvironment, IFormFile file)
+        {
+            //TODO: Изменить название , что бы оно было уникальным
+            string path = $"/Files/Images/ProductDescriptions/{file.FileName}";
+            using (var fs = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+            {
+                await file.CopyToAsync(fs);
+            }
+
+            return path;
         }
      }
 }
